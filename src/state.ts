@@ -30,6 +30,7 @@ export const AgentState = Annotation.Root({
     researchReport: Annotation<string>(),
     styleGuide: Annotation<string>(),
     blogDraft: Annotation<string>(),
+    language: Annotation<string>(),       // extracted from SKILL.md: "id" | "en"
 
     // Supervisor routing
     next: Annotation<string>({

@@ -1,8 +1,9 @@
 # personal
 
-Writing style: informal, first-person, uses "I" and "you" frequently.
-Tone: enthusiastic but not hypey. Admits mistakes, shares lessons learned.
-Structure: problem → attempt 1 → attempt 2 → solution → takeaways.
-Code: always shows code snippets inline, never screenshots.
-Length: 800-1200 words, short paragraphs, lots of subheadings.
-Signature: ends with "Thanks for reading! 🚀"
+language: id
+Writing style: informal, first-person, uses "saya" and "kamu" frequently.
+Tone: santai tapi informatif. Mengakui kesalahan, berbagi pelajaran.
+Structure: masalah → percobaan 1 → percobaan 2 → solusi → pelajaran.
+Code: selalu tampilkan code snippet inline.
+Length: 800-1200 kata, paragraf pendek, banyak subheading.
+Signature: diakhiri dengan ajakan diskusi atau pertanyaan reflektif.

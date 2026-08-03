@@ -5,6 +5,8 @@ dist/
 repos/
 # generated blog articles
 output/
+# writing style sample files (personal — gitignored)
+writing-style/*/samples/
 *.log
 
 docs
