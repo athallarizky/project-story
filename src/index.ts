@@ -67,27 +67,64 @@ program
         console.log('\n⏳ Running multi-agent pipeline...\n')
 
         try {
-            const result = await app.invoke({
-                messages: [
-                    new HumanMessage(
-                        `Please analyze this repository and create a blog article: ${repoInput}\n\n` +
-                        (styleName
-                            ? `Use the "${styleName}" writing style for the article.`
-                            : styleDir
-                                ? `Use the writing style from: ${styleDir}`
-                                : styleSamplePaths.length > 0
-                                    ? `Use these blog posts to match the writing style: ${styleSamplePaths.join(', ')}`
-                                    : '')
-                    ),
-                ],
-                repoInput,
-                repoPath,
-                styleName,
-                styleDir,
-                styleSamplePaths,
-            }, { recursionLimit: 100 })
+            const stream = await app.stream(
+                {
+                    messages: [
+                        new HumanMessage(
+                            `Please analyze this repository and create a blog article: ${repoInput}\n\n` +
+                            (styleName
+                                ? `Use the "${styleName}" writing style for the article.`
+                                : styleDir
+                                    ? `Use the writing style from: ${styleDir}`
+                                    : styleSamplePaths.length > 0
+                                        ? `Use these blog posts to match the writing style: ${styleSamplePaths.join(', ')}`
+                                        : '')
+                        ),
+                    ],
+                    repoInput,
+                    repoPath,
+                    styleName,
+                    styleDir,
+                    styleSamplePaths,
+                },
+                { streamMode: 'updates', recursionLimit: 100 }
+            )
 
-            const blog = result.blogDraft
+            let finalState: Record<string, any> = {}
+
+            for await (const update of stream) {
+                // Stream updates come as { nodeName: { ...output } }
+                const [nodeName, nodeOutput] = Object.entries(update)[0] as [string, any]
+
+                // Pretty print what each node produced
+                const icon = nodeName === 'supervisor' ? '🧭' : nodeName === 'researcher' ? '🔍' : nodeName === 'writer' ? '✍️' : '📝'
+                console.log(`\n${icon} [${nodeName}]`)
+
+                if (nodeOutput.next) {
+                    console.log(`   → Routing to: ${nodeOutput.next}`)
+                }
+
+                if (nodeOutput.researchReport) {
+                    const preview = nodeOutput.researchReport.slice(0, 200)
+                    console.log(`   Research: ${preview}${nodeOutput.researchReport.length > 200 ? '...' : ''}`)
+                }
+
+                if (nodeOutput.styleGuide) {
+                    const preview = nodeOutput.styleGuide.slice(0, 200)
+                    console.log(`   Style guide: ${preview}${nodeOutput.styleGuide.length > 200 ? '...' : ''}`)
+                }
+
+                if (nodeOutput.blogDraft) {
+                    const lines = nodeOutput.blogDraft.split('\n').length
+                    const words = nodeOutput.blogDraft.split(/\s+/).length
+                    console.log(`   Blog draft: ~${words} words, ${lines} lines`)
+                }
+
+                // Merge into final state
+                finalState = { ...finalState, ...nodeOutput }
+            }
+
+            const blog = finalState.blogDraft
 
             if (!blog) {
                 console.error('❌ No blog article was generated.')
