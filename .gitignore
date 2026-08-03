@@ -1,6 +1,5 @@
 node_modules/
 dist/
-.env
 # cloned repos
 repos/
 # generated blog articles
@@ -11,3 +10,4 @@ writing-style/*/samples/
 
 docs
 .commandcode
+config.bat
