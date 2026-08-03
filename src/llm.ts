@@ -6,9 +6,13 @@ import { ChatOpenAI } from '@langchain/openai'
 const ZAI_API_KEY = process.env.ZAI_API_KEY
 const ZAI_BASE_URL = process.env.ZAI_BASE_URL
 
-export function createLLM() {
-    const provider = process.env.LLM_PROVIDER ?? "openai"
-    const model = process.env.LLM_MODEL ?? "glm-5.2"
+interface ICreateLLMProps {
+    customModel?: string | undefined
+}
+
+export function createLLM({ customModel } : ICreateLLMProps) {
+    const provider = process.env.LLM_PROVIDER ?? ''
+    const model = customModel ?? process.env.LLM_MODEL ?? ''
 
     if(provider === "antrophic"){
         return new ChatAnthropic({

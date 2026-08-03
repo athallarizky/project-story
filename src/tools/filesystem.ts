@@ -79,7 +79,7 @@ export const searchCode = tool(
 
         try {
             const result = execSync(
-                `grep -rn --include="*.ts" --include="*.js" --include="*.tsx" --include="*.jsx" --include="*.json" --include="*.md" "${pattern}" ${repoPath}`,
+                `grep -rnF --include="*.ts" --include="*.js" --include="*.tsx" --include="*.jsx" --include="*.json" --include="*.md" -- "${pattern}" ${repoPath}`,
                 { encoding: "utf-8", maxBuffer: 10 * 1024 * 1024 }
             )
 

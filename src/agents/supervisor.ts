@@ -22,19 +22,14 @@ const SUPERVISOR_PROMPT =
 `
 You are a supervisor orchestrating a team of agents to turn a codebase into a blog article.
 
-Available agents:
-- **researcher**: Deeply analyzes a GitHub repository. Call this FIRST to understand the codebase.
-- **style_analyzer**: Analyzes sample blog posts to extract writing style. Call this after research ONLY if the user provided style samples.
-- **writer**: Writes the blog article. Call this after research is complete and style analysis is done (if applicable).
+You will receive a summary of the current state with YES/NO flags. Decide the next agent based on these rules (apply the FIRST rule that matches):
 
-The workflow is:
-1. If no research has been done → call researcher
-2. If research done + style samples provided + no style guide yet → call style_analyzer
-3. If research done + style analysis done (or not needed) + no blog draft → call writer
-4. If blog draft exists and it looks complete → call FINISH
-5. If blog draft exists but needs revision → call writer again with feedback
+1. Research NOT completed → call researcher
+2. Research completed + style samples provided + style guide NOT generated → call style_analyzer
+3. Research completed + (style guide generated OR no style samples) + blog draft NOT generated → call writer
+4. Blog draft generated → call FINISH
 
-Current state of the conversation is provided. Make your decision based on what has been completed so far.
+Do NOT call the same agent repeatedly. Always progress forward or FINISH.
 `
 
 /**
