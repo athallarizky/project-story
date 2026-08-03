@@ -19,12 +19,13 @@ const MEMBERS = {
 } as const;
 
 // Worker agents (createAgent)
-const researcherAgent = createResearcherAgent(createLLM({ customModel: 'glm-5.2' }))
-const styleAnalyzerAgent = createStyleAnalyzerAgent(createLLM({ customModel: 'glm-5.2' }))
-const writerAgent = createWriterAgent(createLLM({ customModel: 'glm-5.2' }))
+const llm = createLLM({})
+const researcherAgent = createResearcherAgent(llm)
+const styleAnalyzerAgent = createStyleAnalyzerAgent(llm)
+const writerAgent = createWriterAgent(llm)
 
 // Supervisor (structured output chain)
-const supervisorChain = createSupervisorChain(createLLM({ customModel: 'glm-5.2' }))
+const supervisorChain = createSupervisorChain(llm)
 
 // Node Function
 
