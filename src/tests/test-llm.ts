@@ -1,4 +1,4 @@
-import { createLLM } from './llm'
+import { createLLM } from '../llm'
 
 async function test() {
     const llm = createLLM()

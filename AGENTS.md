@@ -86,6 +86,6 @@ project-story/
 
 - **Supervisor pattern** — central agent routes to specialized workers via structured output
 - **SKILL.md** — per-directory briefing doc; agents read it first, then process data through that lens
-- **createReactAgent** — wraps LLM + tools + prompt into a ReAct-loop agent
+- **createAgent** — wraps LLM + tools + prompt into a ReAct-loop agent (from `"langchain"` package)
 - **StateGraph** — directed graph where nodes are agents and edges are routing decisions
 - **Tool calling** — agents invoke typed functions (Zod schemas) to interact with git/filesystem
