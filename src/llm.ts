@@ -1,37 +1,35 @@
-import "dotenv/config"
+import 'dotenv/config'
 import { ChatAnthropic } from '@langchain/anthropic'
 import { ChatOpenAI } from '@langchain/openai'
-
+import type { AgentModelConfig } from './config'
 
 const ZAI_API_KEY = process.env.ZAI_API_KEY
 const ZAI_BASE_URL = process.env.ZAI_BASE_URL
 
-interface ICreateLLMProps {
-    customModel?: string | undefined
-}
-
-export function createLLM({ customModel } : ICreateLLMProps) {
-    const provider = process.env.LLM_PROVIDER ?? ''
-    const model = customModel ?? process.env.LLM_MODEL ?? ''
-
-    if(provider === "antrophic"){
-        return new ChatAnthropic({
-            model,
-            temperature: 0
-        })
-    }
-
-    if(provider === 'zai'){
-        return new ChatAnthropic({
-            apiKey: ZAI_API_KEY,
-            anthropicApiUrl: ZAI_BASE_URL,
-            model,
-            temperature: 0
-        })
-    }
-
-    return new ChatOpenAI({
-        model,
-        temperature: 0
+/**
+ * Create an LLM instance based on an AgentModelConfig.
+ * Each agent passes its own config from src/config.ts.
+ */
+export function createLLM(config: AgentModelConfig) {
+  if (config.provider === 'anthropic') {
+    return new ChatAnthropic({
+      model: config.model,
+      temperature: config.temperature,
     })
+  }
+
+  if (config.provider === 'zai') {
+    return new ChatAnthropic({
+      apiKey: ZAI_API_KEY,
+      anthropicApiUrl: ZAI_BASE_URL,
+      model: config.model,
+      temperature: config.temperature,
+    })
+  }
+
+  // Default: OpenAI
+  return new ChatOpenAI({
+    model: config.model,
+    temperature: config.temperature,
+  })
 }

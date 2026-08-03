@@ -2,6 +2,7 @@ import { StateGraph, END, START } from '@langchain/langgraph'
 import { AIMessage, HumanMessage } from '@langchain/core/messages'
 import { AgentState } from './state'
 import { createLLM } from './llm'
+import { MEMBERS, agentConfig } from './config'
 import { 
     createResearcherAgent,
     createStyleAnalyzerAgent,
@@ -10,22 +11,11 @@ import {
 } from './agents'
 
 
-// Agent member names (used as node names and routing targets)
-const MEMBERS = {
-    RESEARCHER: "researcher",
-    STYLE_ANALYZER: "style_analyzer",
-    WRITER: "writer",
-    SUPERVISOR: "supervisor"
-} as const;
-
-// Worker agents (createAgent)
-const llm = createLLM({})
-const researcherAgent = createResearcherAgent(llm)
-const styleAnalyzerAgent = createStyleAnalyzerAgent(llm)
-const writerAgent = createWriterAgent(llm)
-
-// Supervisor (structured output chain)
-const supervisorChain = createSupervisorChain(llm)
+// Worker agents — each gets its own model from centralized config
+const researcherAgent = createResearcherAgent(createLLM(agentConfig.researcher))
+const styleAnalyzerAgent = createStyleAnalyzerAgent(createLLM(agentConfig.style_analyzer))
+const writerAgent = createWriterAgent(createLLM(agentConfig.writer))
+const supervisorChain = createSupervisorChain(createLLM(agentConfig.supervisor))
 
 // Node Function
 
