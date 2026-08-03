@@ -1,8 +1,10 @@
 node_modules/
 dist/
 .env
-repos/          # cloned repos
-output/         # generated blog articles
+# cloned repos
+repos/
+# generated blog articles
+output/
 *.log
 
 docs
